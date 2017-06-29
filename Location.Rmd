@@ -1,0 +1,29 @@
+---
+title: "My Location"
+author: "Peter Thompson"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  html_document:
+    mathjax: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+---
+
+##Introduction
+
+I have an android phone and wander about the city during the morning. Google maps keeps track of my location. Under the "timeline" settings on [google maps](https://www.google.com/maps/timeline), the data recorded by google can be downloaded in a json format. I thought it would be fun to visualise this a little. 
+
+## Data Cleaning
+
+Data from google comes in a compressed JSON file. 
+
+```{r readjson, cache=TRUE}
+library(tidyjson)
+library(dplyr)
+fname<-"./data/Takeout/Location\ History/Location History.json"
+rawJSON<-readChar(fname,file.info(fname)$size)
+theJSON<-rawJSON %>% as.tbl_json
+
+
+lite <- theJSON %>% enter_object('locations') %>% top_n(20)
+
+
+```
